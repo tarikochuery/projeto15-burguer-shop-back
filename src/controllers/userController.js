@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+
 import jwt from "jsonwebtoken"
 import dotenv from "dotenv"
 import COLLECTIONS from "../database/collections.js";
@@ -14,7 +15,13 @@ export const userController = {
         const hashPassword = bcrypt.hashSync(password, 10);
 
         try {
-            await burguershopdb.collection("users").insertOne({ name, email, password: hashPassword, cart: [] });
+            const user = await burguershopdb.collection(COLLECTIONS.users).findOne({ email })
+
+            if(user){
+                return res.status(409).send()
+            }
+
+            await burguershopdb.collection(COLLECTIONS.users).insertOne({ name, email, password: hashPassword, cart: [] });
             return res.status(201).send();
         } catch (error) {
             return res.status(500).send();
