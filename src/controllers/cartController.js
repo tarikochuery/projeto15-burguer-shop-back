@@ -22,6 +22,19 @@ const cartController = {
       });
 
     return res.sendStatus(201);
+  },
+
+  async getCartItems(req, res) {
+    const { userId } = res.locals;
+
+    try {
+      const user = await burguershopdb.collection(COLLECTIONS.users).findOne({ _id: ObjectId(userId) });
+      if (!user) return res.sendStatus(401);
+
+      res.send(user.cart);
+    } catch (error) {
+      return res.status(500).send(error);
+    }
   }
 };
 
