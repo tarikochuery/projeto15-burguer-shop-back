@@ -15,7 +15,7 @@ export function validateToken(req, res, next){
         if(err){
             res.status(401).send({message: "Invalid token"})
         }
-        req.userId = decoded.id
+        res.locals.userId = decoded.id
     })
     next()
 }
