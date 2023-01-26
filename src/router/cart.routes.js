@@ -1,8 +1,9 @@
 import { Router } from "express";
 import cartController from "../controllers/cartController.js";
-import { validateSchema } from "../middlewares/validateSchema.js";
-import { addToCartByIdSchema } from "../schema/addToCartByIdSchema.js";
+import { validateToken } from "../middlewares/validateToken.js";
 
 export const cartRouter = Router();
 
+cartRouter.use(validateToken);
 cartRouter.post('/cart/:id', cartController.addToCartById);
+cartRouter.get('/cart/', cartController.getCartItems);
