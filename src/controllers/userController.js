@@ -48,7 +48,7 @@ export const userController = {
         return res.status(409).send();
       }
 
-      let token = jwt.sign({ id: user.id }, process.env.SECRET, {
+      let token = jwt.sign({ id: user._id }, process.env.SECRET, {
         expiresIn: "3h",
       });
       return res.send({ token, id: user._id });
