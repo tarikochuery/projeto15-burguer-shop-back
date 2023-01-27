@@ -17,7 +17,7 @@ const cartController = {
     cart.push(product);
 
     await burguershopdb.collection(COLLECTIONS.users)
-      .updateOne({ email }, {
+      .updateOne({ _id: ObjectId(userId) }, {
         $set: { cart }
       });
 
@@ -37,6 +37,7 @@ const cartController = {
     }
   },
 
+
   async deleteProductById(req, res) {
     const { id: productId } = req.params;
     const { userId } = res.locals;
@@ -47,6 +48,7 @@ const cartController = {
         .findOne({ _id: ObjectId(userId) });
 
       if (!user) return res.sendStatus(401);
+
 
       const newCart = user.cart.filter(product => {
         return JSON.stringify(product._id) !== JSON.stringify(ObjectId(productId));
@@ -61,6 +63,7 @@ const cartController = {
           },
           {
             $set: { cart: newCart }
+
           }
         );
 
