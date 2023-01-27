@@ -4,7 +4,6 @@ import { validateToken } from "../middlewares/validateToken.js";
 
 export const cartRouter = Router();
 
-cartRouter.use(validateToken);
-cartRouter.post('/cart/:id', cartController.addToCartById);
-cartRouter.get('/cart/', cartController.getCartItems);
-cartRouter.delete('/cart', cartController.deleteAllProducts);
+cartRouter.post('/cart/:id', validateToken, cartController.addToCartById);
+cartRouter.get('/cart/', validateToken, cartController.getCartItems);
+cartRouter.delete('/cart', validateToken, cartController.deleteAllProducts);
