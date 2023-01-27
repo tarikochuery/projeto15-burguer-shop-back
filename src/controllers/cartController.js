@@ -35,6 +35,39 @@ const cartController = {
     } catch (error) {
       return res.status(500).send(error);
     }
+  },
+
+  async deleteProductById(req, res) {
+    const { id: productId } = req.params;
+    const { userId } = res.locals;
+
+    try {
+      const user = await burguershopdb
+        .collection(COLLECTIONS.users)
+        .findOne({ _id: ObjectId(userId) });
+
+      if (!user) return res.sendStatus(401);
+
+      const newCart = user.cart.filter(product => {
+        return JSON.stringify(product._id) !== JSON.stringify(ObjectId(productId));
+      });
+      if (newCart.length === user.cart.length) return res.status(404).send('Produto não encontrado');
+
+      await burguershopdb
+        .collection(COLLECTIONS.users)
+        .updateOne(
+          {
+            _id: ObjectId(userId)
+          },
+          {
+            $set: { cart: newCart }
+          }
+        );
+
+      return res.sendStatus(200);
+    } catch (error) {
+      return res.status(500).send(error);
+    }
   }
 };
 
