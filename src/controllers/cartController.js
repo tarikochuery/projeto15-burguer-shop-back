@@ -17,7 +17,7 @@ const cartController = {
     cart.push(product);
 
     await burguershopdb.collection(COLLECTIONS.users)
-      .updateOne({ email }, {
+      .updateOne({ _id: ObjectId(userId) }, {
         $set: { cart }
       });
 
