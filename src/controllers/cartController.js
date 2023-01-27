@@ -35,6 +35,33 @@ const cartController = {
     } catch (error) {
       return res.status(500).send(error);
     }
+  },
+
+  async deleteAllProducts(req, res) {
+    const { userId } = res.locals;
+    console.log(userId);
+    try {
+      const user = await burguershopdb
+        .collection(COLLECTIONS.users)
+        .findOne({ _id: ObjectId(userId) });
+
+      if (!user) return res.sendStatus(401);
+
+      await burguershopdb
+        .collection(COLLECTIONS.users)
+        .updateOne(
+          {
+            _id: ObjectId(userId)
+          },
+          {
+            $set: { cart: [] }
+          }
+        );
+
+      return res.sendStatus(200);
+    } catch (error) {
+      return res.status(500).send(error);
+    }
   }
 };
 
