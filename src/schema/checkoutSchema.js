@@ -1,7 +1,6 @@
 import joi from "joi";
 
 export const checkoutSchema = joi.object({
-  name: joi.string().required(),
   city: joi.string().required(),
   street: joi.string().required(),
   district: joi.string().required(),
@@ -10,7 +9,7 @@ export const checkoutSchema = joi.object({
     .string()
     .valid("Dinheiro", "Catão de credito", "Pix")
     .required(),
-  value: joi.string().required(),
+  value: joi.number().required(),
   orders: joi
     .array()
     .items(
