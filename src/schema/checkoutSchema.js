@@ -7,7 +7,7 @@ export const checkoutSchema = joi.object({
   number: joi.string().required(),
   paymentForms: joi
     .string()
-    .valid("Dinheiro", "Catão de credito", "Pix")
+    .valid("Dinheiro", "Cartão de credito", "Pix")
     .required(),
   value: joi.number().required(),
   orders: joi
