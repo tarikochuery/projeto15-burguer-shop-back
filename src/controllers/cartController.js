@@ -44,7 +44,7 @@ const cartController = {
       const user = await burguershopdb
         .collection(COLLECTIONS.users)
         .findOne({ _id: ObjectId(userId) });
-
+  
       if (!user) return res.sendStatus(401);
 
       await burguershopdb
@@ -66,7 +66,7 @@ const cartController = {
 
 
   async deleteProductById(req, res) {
-    const { id: productId } = req.params;
+    const { name: productName } = req.params;
     const { userId } = res.locals;
 
     try {
@@ -75,12 +75,15 @@ const cartController = {
         .findOne({ _id: ObjectId(userId) });
 
       if (!user) return res.sendStatus(401);
+      
+      const nameProducts = user.cart.map(item => item.name)
+      const index = nameProducts.indexOf(productName)
 
+      if(index === -1){
+        return res.status(404).send({message: "user not find"})
+      }
 
-      const newCart = user.cart.filter(product => {
-        return JSON.stringify(product._id) !== JSON.stringify(ObjectId(productId));
-      });
-      if (newCart.length === user.cart.length) return res.status(404).send('Produto não encontrado');
+      user.cart.splice(index, 1)
 
       await burguershopdb
         .collection(COLLECTIONS.users)
@@ -89,7 +92,7 @@ const cartController = {
             _id: ObjectId(userId)
           },
           {
-            $set: { cart: newCart }
+            $set: { cart: user.cart }
 
           }
         );
