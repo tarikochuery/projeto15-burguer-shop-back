@@ -19,6 +19,8 @@ export const checkoutController = {
         return res.status(409).send();
       }
 
+      const date = new Date
+
       await burguershopdb.collection(COLLECTIONS.checkout).insertOne({
         userId,
         name: user.name,
@@ -29,6 +31,7 @@ export const checkoutController = {
         paymentForms,
         value,
         orders,
+        date: date.toUTCString()
       });
 
       return res.status(201).send();
