@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { postCheckout } from "../controllers/CheckoutController.js";
+import { checkoutController } from "../controllers/CheckoutController.js";
 import { validateSchema } from "../middlewares/validateSchema.js";
 import { validateToken } from "../middlewares/validateToken.js";
 import { checkoutSchema } from "../schema/checkoutSchema.js";
@@ -10,7 +10,8 @@ checkoutRouts.post(
   "/checkout",
   validateToken,
   validateSchema(checkoutSchema),
-  postCheckout
+  checkoutController.postCheckout
 );
+checkoutRouts.get("/checkout", validateToken, checkoutController.getHistoryCheckout)
 
 export { checkoutRouts };
